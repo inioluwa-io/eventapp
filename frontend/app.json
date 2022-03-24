@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "Buildnet",
+    "slug": "buildnet",
+    "version": "1.0.2",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/buildnet-splashscreen.jpg",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "cjom.inioluwwa4.buildnet"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "cjom.inioluwwa4.buildnet"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
