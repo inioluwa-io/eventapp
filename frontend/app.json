@@ -2,7 +2,7 @@
   "expo": {
     "name": "Buildnet",
     "slug": "buildnet",
-    "version": "1.0.2",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -28,7 +28,15 @@
       "package": "cjom.inioluwwa4.buildnet"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "build": {
+        "babel": {
+          "include": [
+            "@twotalltotems"
+            
+          ]
+        }
+      }
     }
   }
 }
