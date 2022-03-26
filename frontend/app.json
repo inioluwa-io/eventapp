@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "Buildnet",
-    "slug": "buildnet",
+    "name": "EventApp",
+    "slug": "eventApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/buildnet-splashscreen.jpg",
+      "image": "./assets/eventApp-splashscreen.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -18,14 +18,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "cjom.inioluwwa4.buildnet"
+      "bundleIdentifier": "cjom.inioluwwa4.eventApp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "cjom.inioluwwa4.buildnet"
+      "package": "cjom.inioluwwa4.eventApp"
     },
     "web": {
       "favicon": "./assets/favicon.png",
