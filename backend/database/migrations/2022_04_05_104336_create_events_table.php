@@ -18,8 +18,8 @@ return new class extends Migration
             $table->integer('user_id');
             $table->string('title');
             $table->string('description')->unique();
-            $table->string('lat');
-            $table->string('long');
+            $table->double('lat', 15, 8);
+            $table->double('long', 15, 8);
             $table->timestamps();
         });
     }

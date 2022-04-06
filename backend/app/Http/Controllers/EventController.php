@@ -25,7 +25,7 @@ class EventController extends Controller
     }
 
       /**
-     * Register a User.
+     * Get all Events.
      *
      */
     public function index(){
@@ -34,14 +34,22 @@ class EventController extends Controller
     }
 
       /**
-     * Register a User.
+     * Get one Event.
+     *
+     */
+    public function getOne(Request $request){
+        return $this->findEventById($request->id);
+    }
+
+      /**
+     * Register a Event.
      *
      */
     public function findRange(Request $request){
-        $latitude_range_lower_bound = $request->lat + 0.1;
-        $latitude_range_upper_bound = $request->lat - 0.1;
-        $longitude_range_lower_bound = $request->long + 0.1;
-        $longitude_range_upper_bound = $request->long - 0.1;
+        $latitude_range_lower_bound = (double)$request->lat - 0.1;
+        $latitude_range_upper_bound = (double)$request->lat + 0.1;
+        $longitude_range_lower_bound = (double)$request->long - 0.1;
+        $longitude_range_upper_bound = (double)$request->long + 0.1;
 
         return Event::whereBetween("lat",[$latitude_range_lower_bound,$latitude_range_upper_bound])
         ->whereBetween("long",[$longitude_range_lower_bound,$longitude_range_upper_bound])->get();

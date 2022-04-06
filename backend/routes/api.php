@@ -24,3 +24,10 @@ Route::prefix('/auth')->group(function(){
     Route::get('logout', 'App\Http\Controllers\AuthController@logout');
     Route::post('register', 'App\Http\Controllers\AuthController@register');
 });
+
+Route::prefix('/event')->group(function(){
+    Route::get('', 'App\Http\Controllers\EventController@index');
+    Route::post('', 'App\Http\Controllers\EventController@create');
+    Route::get('{id}', 'App\Http\Controllers\EventController@getOne');
+    Route::post('range', 'App\Http\Controllers\EventController@findRange');
+});
