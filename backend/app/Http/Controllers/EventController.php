@@ -53,6 +53,7 @@ class EventController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function create(Request $request) {
+        $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|between:2,100',
             'description' => 'required|string|min:6',
@@ -65,7 +66,8 @@ class EventController extends Controller
         }
 
         $event = Event::create(array_merge(
-                    $validator->validated()
+                    $validator->validated(),[
+                    'user_id'=>$user->id]
                 ));
         return response()->json([
             'message' => 'Event successfully Created',

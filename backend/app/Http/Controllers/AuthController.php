@@ -15,7 +15,7 @@ class AuthController extends Controller
      *
      * @return void
      */
-    
+
     /**
      * Get a JWT via given credentials.
      *
@@ -60,8 +60,7 @@ class AuthController extends Controller
         $user = User::create(array_merge(
                     $validator->validated(),
                     ['password' => bcrypt($request->password),
-                    'role'=> $request->role ?? 'creator',
-                     'redeem_count'=> 0]
+                    'role'=> $request->role ?? 'user']
                 ));
 
         if (! $token = Auth::attempt(['email'=>$request->email, 'password'=>$request->password])) {
