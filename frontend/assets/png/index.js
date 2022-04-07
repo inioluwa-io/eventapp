@@ -9,10 +9,10 @@ import Arch2 from "./arch2.jpeg";
 import Arch3 from "./arch3.jpeg";
 import Brands from "./brands.png";
 import Brand from "./brand2.png";
+import marker from "./icons8-marker.png";
 
-let png = {};
 
-png = {
+const png = {
   ColorLogo,
   ColorLogoB,
   AvatarUser,
@@ -24,6 +24,7 @@ png = {
   Arch3,
   Brands,
   Brand,
+  marker,
 };
 
 export default png;

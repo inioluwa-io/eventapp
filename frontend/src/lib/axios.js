@@ -2,8 +2,11 @@ import axios from "axios";
 import config from "../config";
 import { getCredentials, showToast } from "../../utils";
 import { strToCapitalize } from "./string";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const parseError = (values, keys, obj) => {
+  console.log(values)
+  return;
   keys.forEach((key) => {
     if (typeof obj[key] !== "string") {
       showToast("error", strToCapitalize(key), `${obj[key][0]}`);
@@ -32,7 +35,7 @@ axios.interceptors.request.use(
     // Check for and add the stored Auth Token to the header request
     let token = "";
     try {
-      token = await getCredentials();
+      token = await AsyncStorage.getItem("@Auth:token");
     } catch (error) {
       /* Nothing */
     }

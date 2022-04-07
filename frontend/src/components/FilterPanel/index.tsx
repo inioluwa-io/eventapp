@@ -4,73 +4,82 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  TouchableWithoutFeedback,
+  Dimensions,
+  ActivityIndicator,
+  Platform,
   SafeAreaView,
+  Image,
 } from "react-native";
-import { CheckBox } from "react-native-elements";
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { EvilIcons } from "@expo/vector-icons";
-import appValues from "../../constants/appValues";
+import * as Location from "expo-location";
 import globalStyles from "../../constants/global.styles";
-import { useFilterPanel } from "../../lib/hooks";
+import { useFilterPanel, useFilters } from "../../lib/hooks";
 import Colors from "../../constants/Colors";
-import ContainerView, { ContainerScrollView } from "../ContainerView";
+import ContainerView from "../ContainerView";
 import BlockButton from "../BlockButton";
 import PaddedView from "../PaddedView";
-import PagerView from "react-native-pager-view";
 import { SwipeablePanel, LARGE_PANEL_CONTENT_HEIGHT } from "rn-swipeable-panel";
-import states from "../../db/states";
-import { ScrollView } from "react-native-gesture-handler";
+import { showToast } from "../../../utils";
+import png from "../../../assets/png";
 
 const FilterPanel: React.FC = () => {
-  const refs = useRef<any>();
+  const { marker } = png;
   const [showFilterPanel, setShowFilterPanel] = useFilterPanel();
-  const [loading, setLoading] = useState(false);
+  const [filters, setFilters] = useFilters();
+  const [location, setLocation] = useState<any>(null);
+  const [region, setRegion] = useState({
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0421,
+    longitudeDelta: 0.0421,
+  });
   const [currentPage, setCurrentPage] = useState(0);
   const [checkedStateHash, setCheckedStateHash] = useState<{
     [key: number]: boolean;
   }>({});
-  const [panelProps, setPanelProps] = useState({
+  const [panelProps] = useState({
     fullWidth: true,
     openLarge: true,
     onClose: () => closePanel(),
     onPressCloseButton: () => closePanel(),
   });
 
-  const openPanel = () => {
-    setShowFilterPanel(true);
-  };
+  const locationIsSet = useCallback((): boolean => {
+    return Object.keys(filters).length > 0;
+  }, [filters]);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        showToast("error", "Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      setRegion(
+        locationIsSet()
+          ? filters
+          : {
+              longitude: location.coords?.longitude,
+              latitude: location.coords?.latitude,
+              latitudeDelta: 0.0421,
+              longitudeDelta: 0.0421,
+            }
+      );
+    })();
+  }, [locationIsSet]);
 
   const closePanel = () => {
     setCurrentPage(0);
     setShowFilterPanel(false);
   };
 
-  useEffect(() => {
-    requestAnimationFrame(() => refs.current?.setPage(currentPage));
-  }, [currentPage]);
-
-  const handlePrevPage = () => {
-    setCurrentPage((prev) => prev - 1);
+  const onRegionChange = (val: any) => {
+    setRegion(val);
   };
-
-  const handleNextPage = () => {
-    setCurrentPage(1);
-  };
-
-  const getTitle = useCallback(() => {
-    switch (currentPage) {
-      case 1: {
-        return "Back";
-      }
-      default: {
-        return "Filter";
-      }
-    }
-  }, [currentPage]);
-
-  const getSelectedStateCount = useCallback(() => {
-    return Object.values(checkedStateHash).filter((val) => val).length;
-  }, [checkedStateHash]);
 
   return (
     <SwipeablePanel
@@ -86,11 +95,6 @@ const FilterPanel: React.FC = () => {
         }}
       >
         <View style={styles.header}>
-          {currentPage !== 0 && (
-            <Pressable style={styles.back} onPress={handlePrevPage}>
-              <EvilIcons name="chevron-left" size={40} color={Colors.black} />
-            </Pressable>
-          )}
           <Text
             style={[
               globalStyles.text,
@@ -99,104 +103,51 @@ const FilterPanel: React.FC = () => {
               },
             ]}
           >
-            {getTitle()}
+            Choose location
           </Text>
           <Pressable style={styles.closeButton} onPress={closePanel}>
             <EvilIcons name="close" size={27} color="black" />
           </Pressable>
         </View>
-        <ContainerScrollView style={styles.content}>
-          <TouchableWithoutFeedback>
-            <SafeAreaView style={{ flex: 1 }}>
-              <PagerView
-                style={styles.pagerView}
-                scrollEnabled={false}
-                initialPage={currentPage}
-                ref={refs}
+        <ContainerView style={styles.content}>
+          {!location ? (
+            <ContainerView
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <PaddedView
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
-                <View key={1}>
-                  <PaddedView
-                    style={[
-                      {
-                        paddingVertical: 17,
-                        borderBottomWidth: 1,
-                        borderBottomColor: Colors.grey,
-                        flex: 0,
-                      },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        {
-                          fontFamily: "DMSans_500Medium",
-                          fontSize: appValues.font.h3,
-                        },
-                      ]}
-                    >
-                      Choose State
-                    </Text>
-                  </PaddedView>
-                  <Pressable
-                    style={styles.listContainer}
-                    onPress={handleNextPage}
-                  >
-                    <View>
-                      <Text style={[globalStyles.text]}>
-                        {getSelectedStateCount()} Selected
-                      </Text>
-                    </View>
-                    <View style={{ marginRight: -10 }}>
-                      <EvilIcons
-                        name="chevron-right"
-                        size={40}
-                        color={Colors.black}
-                      />
-                    </View>
-                  </Pressable>
-                </View>
-                <ScrollView showsVerticalScrollIndicator={false} key={2}>
-                  {states.map((name, id) => (
-                    <Pressable
-                      key={name}
-                      style={[styles.listContainer, { paddingVertical: 0 }]}
-                      onPress={handleNextPage}
-                    >
-                      <View
-                        style={{ flexDirection: "row", alignItems: "center" }}
-                      >
-                        <View>
-                          <CheckBox
-                            iconType="ionicon"
-                            checkedIcon="ios-checkbox"
-                            uncheckedIcon={
-                              <View style={styles.unCheckedIcon} />
-                            }
-                            checkedColor={Colors.black}
-                            checked={checkedStateHash[id]}
-                            size={30}
-                            onPress={() => {
-                              setCheckedStateHash({
-                                ...checkedStateHash,
-                                [id]: !checkedStateHash[id],
-                              });
-                              setLoading(true);
-                              setTimeout(() => {
-                                setLoading(false);
-                              }, 1800);
-                            }}
-                            style={{ width: 30, height: 30 }}
-                            wrapperStyle={{ marginLeft: -20, marginRight: -10 }}
-                          />
-                        </View>
-                        <Text style={[globalStyles.text]}>{name}</Text>
-                      </View>
-                    </Pressable>
-                  ))}
-                </ScrollView>
-              </PagerView>
-            </SafeAreaView>
-          </TouchableWithoutFeedback>
-        </ContainerScrollView>
+                <ActivityIndicator
+                  size={"large"}
+                  color={Platform.OS === "android" ? "#ccc" : undefined}
+                />
+              </PaddedView>
+            </ContainerView>
+          ) : (
+            <ContainerView>
+              <MapView
+                provider={PROVIDER_GOOGLE}
+                initialRegion={region}
+                style={styles.map}
+                showsUserLocation={true}
+                showsMyLocationButton={true}
+                followsUserLocation={true}
+                onRegionChange={onRegionChange}
+              ></MapView>
+              <View style={styles.markerFixed}>
+                <Image style={styles.marker} source={marker} />
+              </View>
+            </ContainerView>
+          )}
+        </ContainerView>
         <PaddedView
           style={{
             flex: 0,
@@ -204,7 +155,14 @@ const FilterPanel: React.FC = () => {
             borderTopColor: Colors.grey,
           }}
         >
-          <BlockButton loading={loading}>Apply Filter</BlockButton>
+          <BlockButton
+            onPress={() => {
+              setFilters(region);
+              closePanel();
+            }}
+          >
+            Save
+          </BlockButton>
         </PaddedView>
       </ContainerView>
     </SwipeablePanel>
@@ -258,5 +216,31 @@ const styles = StyleSheet.create({
     borderColor: Colors.black,
     borderRadius: 3,
     borderWidth: 1,
+  },
+  map: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height - 270,
+  },
+  markerFixed: {
+    left: "50%",
+    marginLeft: -24,
+    marginTop: -48,
+    position: "absolute",
+    top: "50%",
+  },
+  marker: {
+    height: 48,
+    width: 48,
+  },
+  footer: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    bottom: 0,
+    position: "absolute",
+    width: "100%",
+  },
+  region: {
+    color: "#fff",
+    lineHeight: 20,
+    margin: 20,
   },
 });

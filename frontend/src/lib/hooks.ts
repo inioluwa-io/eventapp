@@ -1,4 +1,9 @@
-import { SET_LOGGED_IN, SET_SHOW_FILTER } from "./../redux/types/index";
+import {
+  SET_LOGGED_IN,
+  SET_SHOW_FILTER,
+  SET_USER,
+  SET_FILTERS,
+} from "./../redux/types/index";
 /* eslint-disable no-unused-vars */
 import {
   useState,
@@ -231,7 +236,7 @@ export type FilterPanelState = () => [boolean, DispatchFilterPanel];
 export const useFilterPanel: FilterPanelState = () => {
   const dispatch = useDispatch();
   const filterPanel = useSelector<ReducerRootState, boolean>(
-    (state) => state.ui.loading
+    (state) => state.ui.showFilter
   );
 
   const setFilterPanel: DispatchFilterPanel = useCallback(
@@ -242,6 +247,29 @@ export const useFilterPanel: FilterPanelState = () => {
   );
 
   return [filterPanel, setFilterPanel];
+};
+
+type DispatchFilters = (payload: any) => void;
+export type FiltersState = () => [any, DispatchFilters];
+
+/**
+ * Allow you have access to the filters reducer in redux store
+ * @returns {object} an object of redux filters state and function to dispatch filters payload to redux
+ * */
+export const useFilters: FiltersState = () => {
+  const dispatch = useDispatch();
+  const filter = useSelector<ReducerRootState, boolean>(
+    (state) => state.ui.filters
+  );
+
+  const setFilter: DispatchFilterPanel = useCallback(
+    (payload) => {
+      dispatch({ type: SET_FILTERS, payload });
+    },
+    [dispatch]
+  );
+
+  return [filter, setFilter];
 };
 
 type DispatchLoggedIn = (payload: boolean) => void;
@@ -267,6 +295,29 @@ export const useIsLoggedIn: LoggedInState = () => {
   return [loggedIn, setLoggedIn];
 };
 
+type DispatchUser = (payload: any) => void;
+export type UserState = () => [any, DispatchUser];
+
+/**
+ * Allow you have access to the user reducer in redux store
+ * @returns {object} an object of redux user state and function to dispatch user payload to redux
+ * */
+export const useUser: UserState = () => {
+  const dispatch = useDispatch();
+  const loggedIn = useSelector<ReducerRootState, boolean>(
+    (state) => state.user.user
+  );
+
+  const setLoggedIn: DispatchUser = useCallback(
+    (payload) => {
+      dispatch({ type: SET_USER, payload });
+    },
+    [dispatch]
+  );
+
+  return [loggedIn, setLoggedIn];
+};
+
 const hooks = {
   useMedia,
   usePrevious,
@@ -278,6 +329,7 @@ const hooks = {
   useEventListener,
   useFilterPanel,
   useIsLoggedIn,
+  useUser,
 };
 
 export default hooks;

@@ -20,7 +20,7 @@ const userReducer: any = (state = initialState, action: any) => {
     case SET_USER:
       return {
         ...state,
-        USER: payload,
+        user: payload,
       };
     default:
       return state;

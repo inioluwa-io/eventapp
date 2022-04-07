@@ -1,7 +1,8 @@
 export default {
   primary: "#AAAADD",
   black: "#222",
-  secondary: "#FDE24B",
+  secondary: "#FDE21F",
+  secondaryFade: "#FDE21F88",
   darkText: "#1E1E20",
   mutedText: "#C4C4C4",
   gradient: {

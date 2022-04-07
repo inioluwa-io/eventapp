@@ -9,6 +9,7 @@ export const SET_LOGGED_IN: string = "SET_LOGGED_IN";
 export const SET_USER: string = "SET_USER";
 export const SET_ALL_ADDRESSES: string = "SET_ALL_ADDRESSES";
 export const SET_SHOW_FILTER: string = "SET_SHOW_FILTER";
+export const SET_FILTERS: string = "SET_FILTERS";
 
 const ActionTypes = {
   SET_LOGGED_IN_USER,

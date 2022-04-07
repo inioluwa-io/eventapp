@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { darken, lighten } from "polished";
-import { StyleSheet, View, Dimensions, Text, Animated } from "react-native";
-import { Avatar, Image, Rating, Tab, TabView } from "react-native-elements";
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  Text,
+  Animated,
+  ActivityIndicator,
+  Platform,
+} from "react-native";
+import { Image } from "react-native-elements";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import BlockButton from "../../components/BlockButton";
-import { ContainerScrollView } from "../../components/ContainerView";
-import PaddedView from "../../components/PaddedView";
-import Colors from "../../constants/Colors";
-import globalStyles from "../../constants/global.styles";
-import Layout from "../../constants/Layout";
+import ContainerView, {
+  ContainerScrollView,
+} from "../../components/ContainerView";
 import { PageProps } from "../../../types";
-import axios from "../../lib/axios";
 import png from "../../../assets/png";
+import PaddedView from "../../components/PaddedView";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { showToast } from "../../../utils";
 
 const photosImg = [png.Arch1, png.Arch, png.Arch2, png.Arch3];
 const { height, width } = Dimensions.get("window");
@@ -60,9 +66,6 @@ const markersCoords = [
 ];
 
 const Account: React.FC<PageProps> = ({ navigation }) => {
-  const [index, setIndex] = useState(0);
-  const WIDTH = Layout.window.width - 40;
-  const [height, setHeight] = useState<number>(100);
   const [location, setLocation] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [animation, setAnimation] = useState<any>();
@@ -77,13 +80,12 @@ const Account: React.FC<PageProps> = ({ navigation }) => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+        showToast("error", "Permission to access location was denied");
         return;
       }
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
-      console.log(location);
       setRegion({
         longitude: location.coords?.longitude,
         latitude: location.coords?.latitude,
@@ -94,7 +96,6 @@ const Account: React.FC<PageProps> = ({ navigation }) => {
   }, []);
 
   const onRegionChange = (coords: any) => {
-    console.log(coords);
     setRegion(coords);
   };
 
@@ -104,11 +105,26 @@ const Account: React.FC<PageProps> = ({ navigation }) => {
 
   if (!location)
     return (
-      <ContainerScrollView>
-        <View>
-          <Text>Loading</Text>
-        </View>
-      </ContainerScrollView>
+      <ContainerView
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <PaddedView
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ActivityIndicator
+            size={"large"}
+            color={Platform.OS === "android" ? "#ccc" : undefined}
+          />
+        </PaddedView>
+      </ContainerView>
     );
 
   const interpolations = markersCoords.map((marker, idx) => {
@@ -196,7 +212,13 @@ const Account: React.FC<PageProps> = ({ navigation }) => {
           )}
         >
           {markersCoords.map((marker: any, index) => (
-            <View key={index} style={styles.card}>
+            <TouchableOpacity
+              key={index}
+              style={styles.card}
+              onPress={() => {
+                navigation?.navigate("EventScreen", { id: 1 });
+              }}
+            >
               <Image
                 source={marker.image}
                 style={styles.cardImage}
@@ -210,7 +232,7 @@ const Account: React.FC<PageProps> = ({ navigation }) => {
                   {marker.description}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
         </Animated.ScrollView>
       </View>

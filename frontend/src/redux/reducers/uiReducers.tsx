@@ -2,18 +2,21 @@ import ActionTypes, {
   SET_SHOW_FILTER,
   SET_LOADING,
   SET_LOGGED_IN,
+  SET_FILTERS,
 } from "../types";
 
 export type UIReducerStateProps = {
   loading: boolean;
   loggedIn: boolean;
   showFilter: boolean;
+  filters: any;
 };
 
 const initialState: UIReducerStateProps = {
   loading: false,
   loggedIn: false,
   showFilter: false,
+  filters: {},
 };
 
 export type ActionType = {
@@ -33,7 +36,12 @@ const uiReducer: any = (state = initialState, action: any) => {
     case SET_SHOW_FILTER:
       return {
         ...state,
-        loading: payload,
+        showFilter: payload,
+      };
+    case SET_FILTERS:
+      return {
+        ...state,
+        filters: payload,
       };
     case SET_LOGGED_IN:
       return {

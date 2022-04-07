@@ -6,8 +6,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import AccountScreen from "./account";
 import SettingsButton from "../../components/settingsButton";
 import globalStyles from "../../constants/global.styles";
-import EditProfile from "./editProfile";
+import AddEvent from "./addEvent";
 import Settings from "./settings";
+import MyEvents from "./myEvents";
+import Event from "./event";
 
 const AccountStackNavigator = createStackNavigator();
 
@@ -53,8 +55,8 @@ const Account: React.FC = () => {
         })}
       />
       <AccountStackNavigator.Screen
-        name="EditProfileScreen"
-        component={EditProfile}
+        name="AddEventScreen"
+        component={AddEvent}
         options={({ navigation }) => ({
           headerLeft: () => <BackArrow onPress={() => navigation.goBack()} />,
           gestureEnabled: true,
@@ -68,7 +70,49 @@ const Account: React.FC = () => {
                 },
               ]}
             >
-              Edit Profile
+              Add Event
+            </Text>
+          ),
+        })}
+      />
+      <AccountStackNavigator.Screen
+        name="MyEventsScreen"
+        component={MyEvents}
+        options={({ navigation }) => ({
+          headerLeft: () => <BackArrow onPress={() => navigation.goBack()} />,
+          gestureEnabled: true,
+          headerShown: true,
+          headerTitle: () => (
+            <Text
+              style={[
+                globalStyles.text,
+                {
+                  fontFamily: "DMSans_700Bold",
+                },
+              ]}
+            >
+              My Events
+            </Text>
+          ),
+        })}
+      />
+      <AccountStackNavigator.Screen
+        name="EventScreen"
+        component={Event}
+        options={({ navigation }) => ({
+          headerLeft: () => <BackArrow onPress={() => navigation.goBack()} />,
+          gestureEnabled: true,
+          headerShown: true,
+          headerTitle: () => (
+            <Text
+              style={[
+                globalStyles.text,
+                {
+                  fontFamily: "DMSans_700Bold",
+                },
+              ]}
+            >
+              Event
             </Text>
           ),
         })}

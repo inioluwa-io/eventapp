@@ -8,22 +8,20 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
-  ActivityIndicator,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Input } from "react-native-elements";
 import BlockButton from "../../components/BlockButton";
 import { ContainerScrollView } from "../../components/ContainerView";
 import PaddedView from "../../components/PaddedView";
-import appValues from "../../constants/appValues";
 import globalStyles from "../../constants/global.styles";
-import Layout from "../../constants/Layout";
-import { useIsLoggedIn, useToggle } from "../../lib/hooks";
+import { useIsLoggedIn } from "../../lib/hooks";
 import Colors from "../../constants/Colors";
 import { PageProps } from "../../../types";
 import { canSubmit } from "../Authentication/register";
-import axios from "../../lib/axios";
-import { setCredentials, showToast } from "../../../utils";
+import { useUser } from "../../lib/hooks";
+import { showToast } from "../../../utils";
+import { loginUser } from "../../redux/actions";
 
 type FormDataProps = {
   email: string;
@@ -37,22 +35,17 @@ const Login: React.FC<PageProps> = ({ navigation }) => {
     password: "",
   });
   const [, setIsLoggedIn] = useIsLoggedIn();
+  const [, setUser] = useUser();
 
   const handleSignIn = async () => {
-    setIsLoggedIn(true);
-    setTimeout(() => {
-      showToast("success", "Successfully Logged In");
-    }, 700);
     if (canSubmit(formData)) {
       setLoading(true);
       try {
-        // const response = await axios.post("login", formData);
-        // console.log(response.data);
-        setLoading(false);
-        // const { expiry, token } = response.data;
-
-        // await setCredentials(token, expiry);
+        const { data } = await loginUser(formData);
+        await AsyncStorage.setItem("@Auth:token", data?.access_token);
+        setUser(data?.user);
         setIsLoggedIn(true);
+        setLoading(false);
         setTimeout(() => {
           showToast("success", "Successfully Logged In");
         }, 700);

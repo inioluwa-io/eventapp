@@ -29,8 +29,8 @@ class EventController extends Controller
      *
      */
     public function index(){
-
-        return Event::get();
+        $user = Auth::user();
+        return Event::where('user_id',$user->id)->get();
     }
 
       /**
@@ -64,9 +64,9 @@ class EventController extends Controller
         $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|between:2,100',
-            'description' => 'required|string|min:6',
-            'lat' => 'required|string|min:6',
-            'long' => 'required|string|min:6',
+            'description' => 'required|string',
+            'lat' => 'required',
+            'long' => 'required',
         ]);
 
         if($validator->fails()){

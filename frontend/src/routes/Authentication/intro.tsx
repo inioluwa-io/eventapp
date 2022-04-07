@@ -39,10 +39,10 @@ const IntroScreen: React.FC<Props> = ({ navigation }) => {
             { width: Layout.window.width / 1.3 },
           ]}
         >
-          <Text style={[globalStyles.boldText]}>Efficient workers.</Text>
+          <Text style={[globalStyles.boldText]}>Fun events.</Text>
           <Text style={[globalStyles.boldText]}>Easy connect </Text>
           <Text style={[globalStyles.marginTopSm, globalStyles.text]}>
-            Connect with you dream architect.
+            Find events nearby.
           </Text>
         </View>
         <View style={[globalStyles.marginTop, { flexDirection: "row" }]}>

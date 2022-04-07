@@ -14,25 +14,26 @@ import {
   NavigationState,
 } from "react-navigation";
 import { Input } from "react-native-elements";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import BlockButton from "../../components/BlockButton";
 import { ContainerScrollView } from "../../components/ContainerView";
 import PaddedView from "../../components/PaddedView";
 import globalStyles from "../../constants/global.styles";
 import { useToggle } from "../../lib/hooks";
-import axios from "../../lib/axios";
 import Colors from "../../constants/Colors";
 import { showToast } from "../../../utils";
+import { registerUser } from "../../redux/actions";
+import { useIsLoggedIn, useUser } from "../../lib/hooks";
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
 type FormDataProps = {
-  first_name: string;
-  last_name: string;
+  name: string;
   email: string;
   password: string;
-  password2: string;
+  password_confirmation: string;
 };
 
 export const canSubmit = (data: any): boolean => {
@@ -47,25 +48,29 @@ const Register: React.FC<Props> = ({ navigation }) => {
   const [showPassword, setShowPassword] = useToggle(true);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<FormDataProps>({
-    first_name: "",
-    last_name: "",
+    name: "",
     email: "",
     password: "",
-    password2: "",
+    password_confirmation: "",
   });
 
+  const [, setLoggedIn] = useIsLoggedIn();
+  const [, setUser] = useUser();
+
   const handleSignUp = async () => {
-    navigation.navigate("Login");
     if (canSubmit(formData)) {
       setLoading(true);
       try {
-        // await axios.post("registers", formData);
+        const { data } = await registerUser(formData);
+        await AsyncStorage.setItem("@Auth:token", data?.token);
+        setUser(data?.user);
+        setLoggedIn(true);
         setLoading(false);
         setTimeout(() => {
           showToast("success", "Successfully Registered");
           navigation.navigate("Login");
         }, 700);
-      } catch (err) {
+      } catch (err: any) {
         setLoading(false);
       }
     } else {
@@ -89,25 +94,14 @@ const Register: React.FC<Props> = ({ navigation }) => {
             </View>
             <View style={[globalStyles.marginTop]}>
               <Input
-                placeholder="First name"
-                label={formData.first_name && "First name"}
+                placeholder="Fullname"
+                label={formData.name && "Fullname"}
                 labelStyle={[globalStyles.text]}
                 inputStyle={[globalStyles.text]}
                 containerStyle={globalStyles.inputContainerSm}
-                value={formData.first_name}
+                value={formData.name}
                 onChangeText={(val: string) =>
-                  setFormData({ ...formData, first_name: val.trim() })
-                }
-              />
-              <Input
-                placeholder="Last name"
-                label={formData.last_name && "Last name"}
-                labelStyle={[globalStyles.text]}
-                inputStyle={[globalStyles.text]}
-                containerStyle={globalStyles.inputContainerSm}
-                value={formData.last_name}
-                onChangeText={(val: string) =>
-                  setFormData({ ...formData, last_name: val.trim() })
+                  setFormData({ ...formData, name: val.trim() })
                 }
               />
               <Input
@@ -137,15 +131,18 @@ const Register: React.FC<Props> = ({ navigation }) => {
               />
               <Input
                 placeholder="Confirm Password"
-                label={formData.password2 && "Confirm Password"}
+                label={formData.password_confirmation && "Confirm Password"}
                 textContentType="password"
                 labelStyle={[globalStyles.text]}
                 inputStyle={[globalStyles.text]}
                 secureTextEntry={true}
                 containerStyle={globalStyles.inputContainerSm}
-                value={formData.password2}
+                value={formData.password_confirmation}
                 onChangeText={(val: string) =>
-                  setFormData({ ...formData, password2: val.trim() })
+                  setFormData({
+                    ...formData,
+                    password_confirmation: val.trim(),
+                  })
                 }
               />
             </View>

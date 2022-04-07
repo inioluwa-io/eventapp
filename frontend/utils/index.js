@@ -14,7 +14,7 @@ export const showToast = (type, title, body, position = "top") => {
 export const setCredentials = async (token, expiry) => {
   try {
     await AsyncStorage.setItem("@Auth:token", JSON.stringify(token));
-    await AsyncStorage.setItem("@Auth:expiry", JSON.stringify(expiry));
+    // await AsyncStorage.setItem("@Auth:expiry", JSON.stringify(expiry));
   } catch (e) {
     console.log(e);
   }
@@ -33,6 +33,7 @@ export const getVerifiedKeys = async (token, expiry) => {
 
   if (token) {
     console.log("checking access");
+    return token;
 
     if (!isTokenExpired(expiry)) {
       console.log("returning access");
@@ -67,10 +68,10 @@ export const getCredentials = async () => {
   try {
     let credentials = await AsyncStorage.getItem("@Auth:token");
 
-    let cred = await getVerifiedKeys(JSON.parse(credentials));
+    let cred = JSON.parse(credentials);
 
-    if (credentials != null && cred != null) {
-      return cred;
+    if (credentials != null) {
+      return credentials;
     } else {
       return null;
     }
@@ -83,7 +84,7 @@ export const getCredentials = async () => {
 export const removeCredentials = async () => {
   try {
     await AsyncStorage.removeItem("@Auth:token");
-    await AsyncStorage.removeItem("@Auth:expiry");
+    // await AsyncStorage.removeItem("@Auth:expiry");
   } catch (e) {
     console.log(e);
     return null;

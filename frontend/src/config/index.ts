@@ -32,5 +32,5 @@ const theme: ITheme = {
   boxShadow: "0 2px 13px -4px #bbb",
 };
 
-const config: IConfig = { baseUrl: "https://mobile.buildnet.ng", theme };
+const config: IConfig = { baseUrl: "http://192.168.0.177:80/api", theme };
 export default config;

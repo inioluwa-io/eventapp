@@ -70,3 +70,5 @@ export type CategoryButtonProps = {
   onCategorySelect?: (idx: number) => void;
   selectedCategory?: number | null;
 } & PressableProps;
+
+// php artisan serve --host YOUR_IP --port 80
