@@ -14,7 +14,6 @@ const Settings: React.FC<PageProps> = ({ navigation }) => {
   const [height, setHeight] = useState<number>(100);
   const [, setIsLoggedIn] = useIsLoggedIn();
   const [user] = useUser();
-  console.log(user);
 
   const list = [
     {

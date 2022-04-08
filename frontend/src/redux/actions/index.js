@@ -24,4 +24,26 @@ export const createEvent = (params) => {
   });
 };
 
-export default { registerUser, loginUser, createEvent };
+export const getEvents = () => {
+  return axios.get("http://192.168.0.177:80/api/event");
+};
+
+export const getOneEvent = (id) => {
+  return axios.get("http://192.168.0.177:80/api/event/" + id);
+};
+
+export const deleteOneEvent = (id) => {
+  return axios.delete("http://192.168.0.177:80/api/event/" + id);
+};
+
+export const getAllEvents = (params) => {
+  return axios.post("http://192.168.0.177:80/api/event/range", { ...params });
+};
+
+export default {
+  registerUser,
+  loginUser,
+  createEvent,
+  getOneEvent,
+  deleteOneEvent,
+};

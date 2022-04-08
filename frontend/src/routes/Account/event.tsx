@@ -13,15 +13,24 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { showToast } from "../../../utils";
 import appValues from "../../constants/appValues";
 import Colors from "../../constants/Colors";
+import { useEffect } from "react";
+import { getOneEvent, deleteOneEvent } from "../../redux/actions";
 
 interface Props {
+  route: any;
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
-const Event: React.FC<Props> = ({ navigation }) => {
-  const handleDelete = () => {
-    showToast("success", undefined, "Successfully Deleted", "top");
-    navigation.goBack();
+const Event: React.FC<Props> = ({ route, navigation }) => {
+  const [event, setEvent] = useState<any>();
+  const handleDelete = async () => {
+    try {
+      await deleteOneEvent(route?.params.id);
+      showToast("success", undefined, "Successfully Deleted", "top");
+      navigation.navigate("SettingsScreen");
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const createTwoButtonAlert = () => {
@@ -40,6 +49,17 @@ const Event: React.FC<Props> = ({ navigation }) => {
       },
     ]);
   };
+
+  const fetchEvent = async () => {
+    try {
+      const { data } = await getOneEvent(route?.params.id);
+      setEvent(data);
+    } catch (e) {}
+  };
+
+  useEffect(() => {
+    fetchEvent();
+  }, []);
 
   return (
     <ContainerScrollView>
@@ -65,7 +85,7 @@ const Event: React.FC<Props> = ({ navigation }) => {
                 },
               ]}
             >
-              Title
+              {event?.title}
             </Text>
             <Text
               style={[
@@ -73,7 +93,7 @@ const Event: React.FC<Props> = ({ navigation }) => {
                 { color: Colors.darkGrayText, fontSize: appValues.font.h4 },
               ]}
             >
-              4 March
+              {event?.description}
             </Text>
           </View>
         </TouchableOpacity>

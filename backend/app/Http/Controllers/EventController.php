@@ -38,7 +38,10 @@ class EventController extends Controller
      *
      */
     public function getOne(Request $request){
-        return $this->findEventById($request->id);
+        if(!$row = $this->findEventById($request->id)){
+            return response()->json(['error' => 'Can not find record.'], 401);
+        }
+        return $row;
     }
 
       /**
@@ -46,10 +49,10 @@ class EventController extends Controller
      *
      */
     public function findRange(Request $request){
-        $latitude_range_lower_bound = (double)$request->lat - 0.1;
-        $latitude_range_upper_bound = (double)$request->lat + 0.1;
-        $longitude_range_lower_bound = (double)$request->long - 0.1;
-        $longitude_range_upper_bound = (double)$request->long + 0.1;
+        $latitude_range_lower_bound = (double)$request->lat - 0.2;
+        $latitude_range_upper_bound = (double)$request->lat + 0.2;
+        $longitude_range_lower_bound = (double)$request->long - 0.2;
+        $longitude_range_upper_bound = (double)$request->long + 0.2;
 
         return Event::whereBetween("lat",[$latitude_range_lower_bound,$latitude_range_upper_bound])
         ->whereBetween("long",[$longitude_range_lower_bound,$longitude_range_upper_bound])->get();

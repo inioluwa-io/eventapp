@@ -11,14 +11,16 @@ import {
 import { Image } from "react-native-elements";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import * as Location from "expo-location";
+import { Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import ContainerView, {
   ContainerScrollView,
 } from "../../components/ContainerView";
 import { PageProps } from "../../../types";
 import png from "../../../assets/png";
 import PaddedView from "../../components/PaddedView";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { showToast } from "../../../utils";
+import { getAllEvents } from "../../redux/actions";
 
 const photosImg = [png.Arch1, png.Arch, png.Arch2, png.Arch3];
 const { height, width } = Dimensions.get("window");
@@ -26,44 +28,44 @@ const { height, width } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
-const markersCoords = [
-  {
-    description: "descriotuib",
-    title: "title1",
-    latLng: {
-      latitude: 7.447513899967341,
-      longitude: 3.9459327485966744,
-    },
-    image: photosImg[0],
-  },
-  {
-    description: "description2",
-    title: "title2",
-    latLng: {
-      latitude: 7.437513899967345,
-      longitude: 3.9459327485966744,
-    },
-    image: photosImg[1],
-  },
-  {
-    description: "description3",
-    title: "title3",
-    latLng: {
-      latitude: 7.437513899967341,
-      longitude: 3.9359327485966744,
-    },
-    image: photosImg[2],
-  },
-  {
-    description: "description4",
-    title: "title4",
-    latLng: {
-      latitude: 7.43413899967341,
-      longitude: 3.9409327485966744,
-    },
-    image: photosImg[4],
-  },
-];
+// const markersCoords = [
+//   {
+//     description: "descriotuib",
+//     title: "title1",
+//     latLng: {
+//       latitude: 7.447513899967341,
+//       longitude: 3.9459327485966744,
+//     },
+//     image: photosImg[0],
+//   },
+//   {
+//     description: "description2",
+//     title: "title2",
+//     latLng: {
+//       latitude: 7.437513899967345,
+//       longitude: 3.9459327485966744,
+//     },
+//     image: photosImg[1],
+//   },
+//   {
+//     description: "description3",
+//     title: "title3",
+//     latLng: {
+//       latitude: 7.437513899967341,
+//       longitude: 3.9359327485966744,
+//     },
+//     image: photosImg[2],
+//   },
+//   {
+//     description: "description4",
+//     title: "title4",
+//     latLng: {
+//       latitude: 7.43413899967341,
+//       longitude: 3.9409327485966744,
+//     },
+//     image: photosImg[4],
+//   },
+// ];
 
 const Account: React.FC<PageProps> = ({ navigation }) => {
   const [location, setLocation] = useState<any>(null);
@@ -75,6 +77,21 @@ const Account: React.FC<PageProps> = ({ navigation }) => {
     latitudeDelta: 0.0421,
     longitudeDelta: 0.0421,
   });
+  const [markersCoords, setMarkersCoords] = useState([]);
+
+  type FetchEventsParams = {
+    lat: number;
+    long: number;
+  };
+
+  const fetchEvents = async (params: FetchEventsParams) => {
+    try {
+      const { data } = await getAllEvents(params);
+      setMarkersCoords(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -86,6 +103,10 @@ const Account: React.FC<PageProps> = ({ navigation }) => {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
+      fetchEvents({
+        long: location.coords?.longitude,
+        lat: location.coords?.latitude,
+      });
       setRegion({
         longitude: location.coords?.longitude,
         latitude: location.coords?.latitude,
@@ -102,6 +123,13 @@ const Account: React.FC<PageProps> = ({ navigation }) => {
   useEffect(() => {
     setAnimation(new Animated.Value(0));
   }, []);
+
+  const refreshEvents = () => {
+    fetchEvents({
+      long: location.coords?.longitude,
+      lat: location.coords?.latitude,
+    });
+  };
 
   if (!location)
     return (
@@ -156,6 +184,30 @@ const Account: React.FC<PageProps> = ({ navigation }) => {
         position: "absolute",
       }}
     >
+      <View
+        style={{
+          marginHorizontal: 10,
+          backgroundColor: "#fff",
+          borderRadius: 20,
+          elevation: 0,
+          padding: 3,
+          shadowOpacity: 0.1,
+          shadowOffset: { height: 1, width: 0 },
+          position: "absolute",
+          right: 0,
+          zIndex: 999,
+          top: 90,
+          // elevation: 9,
+        }}
+      >
+        <TouchableOpacity
+          onPress={refreshEvents}
+          activeOpacity={0.6}
+          style={{ padding: 5 }}
+        >
+          <Ionicons name="refresh" size={24} color={"black"} />
+        </TouchableOpacity>
+      </View>
       {/* <Text>{text}</Text> */}
       <View style={styles.container}>
         <MapView
@@ -177,7 +229,7 @@ const Account: React.FC<PageProps> = ({ navigation }) => {
             return (
               <Marker
                 key={index}
-                coordinate={marker.latLng}
+                coordinate={{ latitude: marker.lat, longitude: marker.long }}
                 title={marker?.title}
                 description={marker.description}
               >
@@ -216,11 +268,11 @@ const Account: React.FC<PageProps> = ({ navigation }) => {
               key={index}
               style={styles.card}
               onPress={() => {
-                navigation?.navigate("EventScreen", { id: 1 });
+                navigation?.navigate("EventScreen", { id: marker?.id });
               }}
             >
               <Image
-                source={marker.image}
+                source={photosImg[0]}
                 style={styles.cardImage}
                 resizeMode="cover"
               />
@@ -276,7 +328,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     position: "absolute",
-    bottom: 30,
+    bottom: 70,
     left: 0,
     right: 0,
     paddingVertical: 10,
@@ -293,7 +345,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOpacity: 0.3,
     shadowOffset: { width: 2, height: -2 },
-    height: CARD_HEIGHT,
+    height: CARD_HEIGHT - 10,
     width: CARD_WIDTH,
     overflow: "hidden",
   },

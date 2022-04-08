@@ -29,5 +29,6 @@ Route::prefix('/event')->group(function(){
     Route::get('', 'App\Http\Controllers\EventController@index');
     Route::post('', 'App\Http\Controllers\EventController@create');
     Route::get('{id}', 'App\Http\Controllers\EventController@getOne');
+    Route::delete('{id}', 'App\Http\Controllers\EventController@delete');
     Route::post('range', 'App\Http\Controllers\EventController@findRange');
 });
