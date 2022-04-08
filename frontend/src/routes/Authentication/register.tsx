@@ -14,6 +14,7 @@ import {
   NavigationState,
 } from "react-navigation";
 import { Input } from "react-native-elements";
+import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BlockButton from "../../components/BlockButton";
 import { ContainerScrollView } from "../../components/ContainerView";
@@ -34,6 +35,7 @@ type FormDataProps = {
   email: string;
   password: string;
   password_confirmation: string;
+  role: string;
 };
 
 export const canSubmit = (data: any): boolean => {
@@ -52,7 +54,10 @@ const Register: React.FC<Props> = ({ navigation }) => {
     email: "",
     password: "",
     password_confirmation: "",
+    role: "user",
   });
+  const [pickerOpacity, setPickerOpacity] = useState<boolean>(false);
+  const [opacityOfOtherItems, setOpacityOfOtherItems] = useState(0);
 
   const [, setLoggedIn] = useIsLoggedIn();
   const [, setUser] = useUser();
@@ -93,6 +98,37 @@ const Register: React.FC<Props> = ({ navigation }) => {
               </Text>
             </View>
             <View style={[globalStyles.marginTop]}>
+              {pickerOpacity && (
+                <View>
+                  <Picker
+                    selectedValue={formData.role}
+                    onValueChange={(itemValue, itemIndex) => {
+                      setFormData({ ...formData, role: itemValue });
+                      setPickerOpacity(false);
+                    }}
+                  >
+                    <Picker.Item label="User" value="user" />
+                    <Picker.Item label="Creator" value="creator" />
+                  </Picker>
+                </View>
+              )}
+              {!pickerOpacity && (
+                <Input
+                  placeholder="Role"
+                  label={formData.role && "Role"}
+                  labelStyle={[globalStyles.text]}
+                  inputStyle={[globalStyles.text]}
+                  containerStyle={globalStyles.inputContainerSm}
+                  value={formData.role}
+                  onChangeText={
+                    (val: string) => {}
+                    // setFormData({ ...formData, name: val.trim() })
+                  }
+                  onPressIn={() => {
+                    setPickerOpacity(true);
+                  }}
+                />
+              )}
               <Input
                 placeholder="Fullname"
                 label={formData.name && "Fullname"}
@@ -108,6 +144,7 @@ const Register: React.FC<Props> = ({ navigation }) => {
                 placeholder="Email address"
                 label={formData.email && "Email address"}
                 keyboardType="email-address"
+                textContentType="emailAddress"
                 labelStyle={[globalStyles.text]}
                 inputStyle={[globalStyles.text]}
                 containerStyle={[globalStyles.inputContainerSm]}
