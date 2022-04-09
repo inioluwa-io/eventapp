@@ -57,8 +57,6 @@ const Register: React.FC<Props> = ({ navigation }) => {
     role: "user",
   });
   const [pickerOpacity, setPickerOpacity] = useState<boolean>(false);
-  const [opacityOfOtherItems, setOpacityOfOtherItems] = useState(0);
-
   const [, setLoggedIn] = useIsLoggedIn();
   const [, setUser] = useUser();
 
@@ -196,7 +194,7 @@ const Register: React.FC<Props> = ({ navigation }) => {
                 </Text>
                 <Pressable>
                   <Text
-                    style={[globalStyles.text, { color: Colors.primary }]}
+                    style={[globalStyles.text, { color: Colors.secondary }]}
                     onPress={() => {
                       navigation.navigate("Login");
                     }}

@@ -3,7 +3,7 @@ import React from "react";
 import BackArrow from "../components/headerBackButton";
 import { headerStyles } from "../constants";
 import Register from "./Authentication/register";
-import Login from "./Login";
+import Login from "./Authentication/login";
 import IntroScreen from "./Authentication/intro";
 
 const AuthStackNavigator = createStackNavigator();

@@ -22,52 +22,13 @@ import PaddedView from "../../components/PaddedView";
 import { showToast } from "../../../utils";
 import { getAllEvents } from "../../redux/actions";
 
-const photosImg = [png.Arch1, png.Arch, png.Arch2, png.Arch3];
+const photosImg = [png.Photo];
 const { height, width } = Dimensions.get("window");
 
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
-// const markersCoords = [
-//   {
-//     description: "descriotuib",
-//     title: "title1",
-//     latLng: {
-//       latitude: 7.447513899967341,
-//       longitude: 3.9459327485966744,
-//     },
-//     image: photosImg[0],
-//   },
-//   {
-//     description: "description2",
-//     title: "title2",
-//     latLng: {
-//       latitude: 7.437513899967345,
-//       longitude: 3.9459327485966744,
-//     },
-//     image: photosImg[1],
-//   },
-//   {
-//     description: "description3",
-//     title: "title3",
-//     latLng: {
-//       latitude: 7.437513899967341,
-//       longitude: 3.9359327485966744,
-//     },
-//     image: photosImg[2],
-//   },
-//   {
-//     description: "description4",
-//     title: "title4",
-//     latLng: {
-//       latitude: 7.43413899967341,
-//       longitude: 3.9409327485966744,
-//     },
-//     image: photosImg[4],
-//   },
-// ];
-
-const Account: React.FC<PageProps> = ({ navigation }) => {
+const Maps: React.FC<PageProps> = ({ navigation }) => {
   const [location, setLocation] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [animation, setAnimation] = useState<any>();
@@ -291,7 +252,7 @@ const Account: React.FC<PageProps> = ({ navigation }) => {
     </ContainerScrollView>
   );
 };
-export default Account;
+export default Maps;
 
 const styles = StyleSheet.create({
   container: {

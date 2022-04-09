@@ -8,7 +8,7 @@ import AnimatedTabBar from "@gorhom/animated-tabbar";
 import Colors from "../constants/Colors";
 import Message from "./Message";
 import Wallet from "./Wallet";
-import Account from "./Account";
+import Account from "./Home";
 import SettingsButton from "../components/settingsButton";
 
 const Tab = createBottomTabNavigator();

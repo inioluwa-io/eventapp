@@ -3,29 +3,39 @@ import { Text } from "react-native";
 import { headerStyles } from "../../constants";
 import BackArrow from "../../components/headerBackButton";
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "./home";
-import ArchitectProfile from "./components/ArchitectProfile";
+import Maps from "./maps";
+import SettingsButton from "../../components/settingsButton";
 import globalStyles from "../../constants/global.styles";
+import AddEvent from "./addEvent";
+import Settings from "./settings";
+import MyEvents from "./myEvents";
+import Event from "./event";
 
-const HomeStackNavigator = createStackNavigator();
+const AccountStackNavigator = createStackNavigator();
 
-const Home: React.FC = () => {
+const Account: React.FC = () => {
   return (
-    <HomeStackNavigator.Navigator
+    <AccountStackNavigator.Navigator
       screenOptions={{ ...headerStyles(), headerShown: false }}
     >
-      <HomeStackNavigator.Screen
-        name="HomeScreen"
-        component={HomeScreen}
+      <AccountStackNavigator.Screen
+        name="MapsScreen"
+        component={Maps}
         options={({ navigation }) => ({
-          headerLeft: () => <BackArrow onPress={() => navigation.goBack()} />,
-          gestureEnabled: false,
-          headerShown: false,
+          headerLeft: () => <></>,
+          gestureEnabled: true,
+          headerShown: true,
+          headerRight: () => (
+            <SettingsButton
+              onPress={() => navigation.navigate("SettingsScreen")}
+            />
+          ),
+          headerTransparent: true,
         })}
       />
-      <HomeStackNavigator.Screen
-        name="ArchitectScreen"
-        component={ArchitectProfile}
+      <AccountStackNavigator.Screen
+        name="SettingsScreen"
+        component={Settings}
         options={({ navigation }) => ({
           headerLeft: () => <BackArrow onPress={() => navigation.goBack()} />,
           gestureEnabled: true,
@@ -39,13 +49,76 @@ const Home: React.FC = () => {
                 },
               ]}
             >
-              Profile
+              Settings
             </Text>
           ),
         })}
       />
-    </HomeStackNavigator.Navigator>
+      <AccountStackNavigator.Screen
+        name="AddEventScreen"
+        component={AddEvent}
+        options={({ navigation }) => ({
+          headerLeft: () => <BackArrow onPress={() => navigation.goBack()} />,
+          gestureEnabled: true,
+          headerShown: true,
+          headerTitle: () => (
+            <Text
+              style={[
+                globalStyles.text,
+                {
+                  fontFamily: "DMSans_700Bold",
+                },
+              ]}
+            >
+              Add Event
+            </Text>
+          ),
+        })}
+      />
+      <AccountStackNavigator.Screen
+        name="MyEventsScreen"
+        component={MyEvents}
+        options={({ navigation }) => ({
+          headerLeft: () => <BackArrow onPress={() => navigation.goBack()} />,
+          gestureEnabled: true,
+          headerShown: true,
+          headerTitle: () => (
+            <Text
+              style={[
+                globalStyles.text,
+                {
+                  fontFamily: "DMSans_700Bold",
+                },
+              ]}
+            >
+              My Events
+            </Text>
+          ),
+        })}
+      />
+      <AccountStackNavigator.Screen
+        name="EventScreen"
+        component={Event}
+        options={({ navigation }) => ({
+          headerLeft: () => <BackArrow onPress={() => navigation.goBack()} />,
+          gestureEnabled: true,
+          headerShown: true,
+          headerTitle: () => (
+            <Text
+              style={[
+                globalStyles.text,
+                {
+                  fontFamily: "DMSans_700Bold",
+                },
+              ]}
+            >
+              Event
+            </Text>
+          ),
+        })}
+      />
+    </AccountStackNavigator.Navigator>
   );
 };
 
-export default Home;
+export default Account;

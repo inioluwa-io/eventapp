@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import React from "react";
+import { View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AuthStack from "./auth";
 import {
@@ -19,11 +19,9 @@ import {
   Montserrat_800ExtraBold,
   Montserrat_900Black,
 } from "@expo-google-fonts/montserrat";
-import BottomTabNavigator from "./bottomTabNavigator";
 import FilterPanel from "../components/FilterPanel";
-import { getCredentials } from "../../utils";
 import { useIsLoggedIn } from "../lib/hooks";
-import Account from "./Account";
+import Home from "./Home";
 
 const RootAppNavigator = createStackNavigator();
 
@@ -50,17 +48,13 @@ const MainRoute = () => {
         {!isLoggedIn ? (
           <RootAppNavigator.Screen name="AuthStack" component={AuthStack} />
         ) : (
-          <RootAppNavigator.Screen name="Tabs" component={Account} />
+          <RootAppNavigator.Screen name="Tabs" component={Home} />
         )}
       </RootAppNavigator.Navigator>
       <FilterPanel />
     </>
   );
 };
-
-{
-  /* <RootAppNavigator.Screen name="Tabs" component={BottomTabNavigator} /> */
-}
 
 const Routes = () => {
   const [fontLoading] = useFonts({

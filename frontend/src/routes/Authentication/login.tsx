@@ -111,7 +111,7 @@ const Login: React.FC<PageProps> = ({ navigation }) => {
                   </Text>
                   <Pressable>
                     <Text
-                      style={[globalStyles.text, { color: Colors.primary }]}
+                      style={[globalStyles.text, { color: Colors.secondary }]}
                       onPress={() => {
                         navigation?.navigate("Register");
                       }}
@@ -138,12 +138,3 @@ const Login: React.FC<PageProps> = ({ navigation }) => {
   );
 };
 export default Login;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
