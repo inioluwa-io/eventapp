@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,10 +7,9 @@ import {
   Dimensions,
   ActivityIndicator,
   Platform,
-  SafeAreaView,
   Image,
 } from "react-native";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { EvilIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import globalStyles from "../../constants/global.styles";
@@ -34,10 +33,7 @@ const FilterPanel: React.FC = () => {
     latitudeDelta: 0.0421,
     longitudeDelta: 0.0421,
   });
-  const [currentPage, setCurrentPage] = useState(0);
-  const [checkedStateHash, setCheckedStateHash] = useState<{
-    [key: number]: boolean;
-  }>({});
+  const [, setCurrentPage] = useState(0);
   const [panelProps] = useState({
     fullWidth: true,
     openLarge: true,

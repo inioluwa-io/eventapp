@@ -1,4 +1,37 @@
-packages/frontend/node_modules
-frontend/node_modules
-node_modules
 */node_modules
+.vscode
+
+# macOS
+.DS_Store
+*/.DS_Store
+
+# frontend
+frontend/node_modules
+frontend/yarn-error.log
+frontend/.expo/
+frontend/dist/
+frontend/npm-debug.*
+frontend/*.jks
+frontend/*.p8
+frontend/*.p12
+frontend/*.key
+frontend/*.mobileprovision
+frontend/*.orig.*
+frontend/web-build/
+
+
+# backend
+backend/node_modules
+backend/public/hot
+backend/public/storage
+backend/storage/*.key
+backend/vendor
+backend/.env
+backend/.env.backup
+backend/.phpunit.result.cache
+# backendHomestead.json
+backend/Homestead.yaml
+backend/npm-debug.log
+backend/yarn-error.log
+backend/.idea
+backend/.vscode

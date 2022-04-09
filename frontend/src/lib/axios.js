@@ -1,13 +1,10 @@
 import axios from "axios";
 import config from "../config";
-import { getCredentials, showToast } from "../../utils";
+import { showToast } from "../../utils";
 import { strToCapitalize } from "./string";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const parseError = (values, keys, obj) => {
-  console.log("values");
-  console.log(values[0])
-  return;
   keys.forEach((key) => {
     if (typeof obj[key] !== "string") {
       showToast("error", strToCapitalize(key), `${obj[key][0]}`);

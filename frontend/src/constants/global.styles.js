@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native";
 import Colors from "./Colors";
-import { MIN_HEADER_HEIGHT } from "./Header";
 import Layout from "./Layout";
 import appValues from "./appValues";
 

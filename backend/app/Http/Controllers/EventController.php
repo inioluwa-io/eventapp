@@ -45,7 +45,7 @@ class EventController extends Controller
     }
 
       /**
-     * Register a Event.
+     * Find an Event within coords range.
      *
      */
     public function findRange(Request $request){
@@ -87,7 +87,7 @@ class EventController extends Controller
     }
 
       /**
-     * Register a Event.
+     * Delete an Event.
      *
      * @return \Illuminate\Http\JsonResponse
      */

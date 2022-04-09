@@ -4,14 +4,11 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { ListItem } from "react-native-elements";
 import Colors from "../../constants/Colors";
 import globalStyles from "../../constants/global.styles";
-import Layout from "../../constants/Layout";
 import { PageProps } from "../../../types";
 import { removeCredentials } from "../../../utils";
 import { useIsLoggedIn, useUser } from "../../lib/hooks";
 
 const Settings: React.FC<PageProps> = ({ navigation }) => {
-  // const WIDTH = Layout.window.width - 40;
-  // const [height, setHeight] = useState<number>(100);
   const [, setIsLoggedIn] = useIsLoggedIn();
   const [user] = useUser();
 

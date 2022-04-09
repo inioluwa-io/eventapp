@@ -19,8 +19,6 @@ import { AxiosRequestConfig } from "axios";
 
 import axios from "./axios";
 import { ReducerRootState } from "../redux/types";
-import { UIReducerStateProps } from "../redux/reducers/uiReducers";
-
 let GLOBAL_ID = 0;
 
 /**
@@ -230,8 +228,8 @@ type DispatchFilterPanel = (payload: boolean) => void;
 export type FilterPanelState = () => [boolean, DispatchFilterPanel];
 
 /**
- * Allow you have access to the user reducer in redux store
- * @returns {object} an object of redux user state and function to dispatch user payload to redux
+ * Allow you have access to the show filter reducer in redux store
+ * @returns {object} an object of redux show filter state and function to dispatch show filter payload to redux
  * */
 export const useFilterPanel: FilterPanelState = () => {
   const dispatch = useDispatch();
@@ -276,8 +274,8 @@ type DispatchLoggedIn = (payload: boolean) => void;
 export type LoggedInState = () => [boolean, DispatchLoggedIn];
 
 /**
- * Allow you have access to the user reducer in redux store
- * @returns {object} an object of redux user state and function to dispatch user payload to redux
+ * Allow you have access to the user logged in reducer in redux store
+ * @returns {object} an object of redux user logged in state and function to dispatch user logged in payload to redux
  * */
 export const useIsLoggedIn: LoggedInState = () => {
   const dispatch = useDispatch();

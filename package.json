@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "start-frontend": "cd frontend && yarn start",
+    "install-frontend": "cd frontend && yarn install",
+    "install-backend": "cd backend && composer install",
     "start-backend": "cd backend && php artisan serve --host 192.168.0.177 --port 80"
   }
 }
